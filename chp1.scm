@@ -119,3 +119,28 @@ a running total and a counter.
         (f-iter y z (+ z (* 2 y) (* 3 x)) (- count 1))))
 
 ; Exercise 1.12
+
+(define (pascals n) 
+    (if (= n 1) 
+        (list 1) 
+        (getNext (pascals (- n 1)))))
+        
+(define (getNext previousList)
+    (getNextAux previousList 
+                (list) 
+                0))
+
+(define (getNextAux previousList newList index)
+    (if (> (length newList) (length previousList))
+        newList
+        (getNextAux previousList 
+                    (append newList (list (getVal previousList index))) 
+                    (+ index 1))))
+
+(define (getVal previousList index)
+    (if (or (= index 0) (>= index (length previousList)))
+        1
+        (+ (list-ref previousList 
+                     (- index 1)) 
+           (list-ref previousList 
+                     index))))
