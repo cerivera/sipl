@@ -32,3 +32,90 @@
 
 ; The `if` special form only evaluates the alternate expression if the predicate is false.  Alyssa's custom `new-if` does not short-circuit during applicative-order evaluation and would evaluate all operands and would result in an infinite loop.
 
+
+; -- Exercise 1.7
+
+; For any X smaller than 0.001, Good enough is going to accept any guess that produces a square smaller than 0.001 since 
+; Is this true?  It seems to be wrong with Xs equal to or around 0.001.
+
+; If you're looking for an absolute value of a really large number, it's possible the improvement algorithm is never going to get close enough to meet the threshold. 
+
+
+#|
+
+|#
+
+(define (sqrt-iter guess x) 
+    (if (good-enough? guess x)
+        guess
+        (sqrt-iter (improve guess x) x)))
+
+(define (improve guess x) 
+    (average guess (/ x guess)))
+
+(define (average x y) (/ (+ x y) 2))
+
+(define (good-enough? guess x)
+    (< (abs (- (square guess) x)) 0.001))
+
+(define (sqrt x)
+    (sqrt-iter 1.0 x))
+
+; -- Exercise 1.8
+
+
+; -- Exercise 1.9
+
+#|
+
+; recursive.  calculations are delayed until base case is recursively reached.
+
+(define (+ a b)
+    (if (= a 0) b (inc (+ (dec a) b))))
+
+(+ 4 5)
+(inc (+ 3 5))
+(inc (inc (+ 2 5)))
+(inc (inc (inc (+ 1 5))))
+(inc (inc (inc (inc (+ 0 5)))))
+(inc (inc (inc (inc 5))))
+(inc (inc (inc 6))))
+(inc (inc 7))
+(inc 8)
+9
+
+
+; iterative.  there's no delayed calculation and the state is in each iteration.  Starts with base case and keeps
+a running total and a counter.
+
+(define (+ a b)
+    (if (= a 0) b (+ (dec a) (inc b))))
+
+(+ 4 5)
+(+ (dec 4) (inc 5))
+(+ 3 6)
+(+ (dec 3) (inc 6))
+(+ 2 7)
+(+ (dec 2) (inc 7))
+(+ 1 8)
+(+ (dec 1) (inc 8))
+(+ 0 9)
+9
+
+|#
+
+; Exercise 1.11
+
+(define (f1 n) 
+    (if (< n 3) 
+        n 
+        (+ (f1 (- n 1)) (* 2 (f1 (- n 2))) (* 3 (f1 (- n 3))))))
+
+(define (f2 n) 
+    (if (< n 3) n (f-iter 0 1 2 n) ))
+
+(define (f-iter x y z count)
+    (if (= count 0) x 
+        (f-iter y z (+ z (* 2 y) (* 3 x)) (- count 1))))
+
+; Exercise 1.12
